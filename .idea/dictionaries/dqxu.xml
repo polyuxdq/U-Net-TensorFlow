@@ -1,8 +1,10 @@
 <component name="ProjectDictionaryState">
   <dictionary name="dqxu">
     <words>
+      <w>logits</w>
       <w>partitioner</w>
       <w>regularizer</w>
+      <w>softmax</w>
     </words>
   </dictionary>
 </component>
