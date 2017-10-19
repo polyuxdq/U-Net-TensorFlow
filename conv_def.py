@@ -8,7 +8,7 @@ import tensorflow.contrib.slim as slim
 def conv3d(inputs, output_channels, kernel_size, stride, padding='same', use_bias=False, name='conv'):
     tensor = tf.layers.conv3d(
         inputs=inputs,                  # Tensor input
-        filters=output_channels,         # Integer, the dimensionality of the output space
+        filters=output_channels,        # Integer, the dimensionality of the output space
         kernel_size=kernel_size,        # An integer or tuple/list of 3, depth, height and width
         strides=stride,                 # (1, 1, 1)
         padding=padding,                # "valid" or "same", same: zero padding
@@ -47,7 +47,7 @@ def conv_bn_relu(inputs, output_channels, kernel_size, stride, is_training, name
             is_training=is_training,
             # In training mode it would accumulate the statistics of the moments into moving_mean
             # and moving_variance using an exponential moving average with the given decay.
-            scope='batch_norm',         # variable_scope
+            scope=name+'_batch_norm',         # variable_scope
             # reuse=None,
             # variables_collections=None,
             # outputs_collections=None,
@@ -65,7 +65,7 @@ def conv_bn_relu(inputs, output_channels, kernel_size, stride, is_training, name
             # activation_fn = None,
         )
         '''Why updates_collections=None?'''
-        relu = tf.nn.relu(features=bn, name='relu')
+        relu = tf.nn.relu(features=bn, name=name+'_relu')
     return relu
 
 
@@ -124,3 +124,4 @@ def conv_bn_relu_x3(inputs, output_channels, kernel_size, stride, is_training, n
         z_out = conv_bn_relu(z_out, output_channels, kernel_size, stride, is_training, name='dense3',
                              padding=padding, use_bias=use_bias)
     return z+z_out
+    # inpust -> z -> z_out -> z_out + z
