@@ -1,4 +1,5 @@
 from conv_def import *
+from load_data import *
 from glob import glob
 import numpy as np
 import time
@@ -46,13 +47,11 @@ class Unet3D(object):
         self.label_data_dir = parameter_dict['label_data_dir']
         self.model_name = parameter_dict['model_name']
         self.check_point_dir = parameter_dict['check_point_dir']
+        self.resize_coefficient = parameter_dict['resize_coefficient']
 
         # from previous version
-        self.resize_r = parameter_dict['resize_r']
         self.save_intval = parameter_dict['save_intval']
         self.ovlp_ita = parameter_dict['ovlp_ita']
-        self.rename_map = parameter_dict['rename_map']
-        self.rename_map = [int(s) for s in self.rename_map.split(',')]
 
         # build model
         self.build_model()
@@ -238,26 +237,38 @@ class Unet3D(object):
         self.log_writer = tf.summary.FileWriter(logdir='./logs/', graph=self.sess.graph)
 
         # load all volume files
-        pair_list = glob(pathname='{}/*.nii.gz'.format(self.train_data_dir))
-        pair_list.sort()
-        '''Something related to read file'''
+        image_list = glob(pathname='{}/*.nii.gz'.format(self.train_data_dir))
+        label_list = glob(pathname='{}/*.nii.gz'.format(self.label_data_dir))
+        image_data_list, label_data_list = load_image_and_label(image_list, label_list, self.resize_coefficient)
+
         with open(file='loss.txt', mode='w') as loss_log:
             for epoch in np.arange(self.epoch):
                 start_time = time.time()
 
-                train_data_batch, train_label_batch = ['something', 'related to get batch']
-                val_data_batch, val_label_batch = ['something', 'related to get batch']
+                # load batch
+                train_data_batch, train_label_batch = get_image_and_label_batch(
+                    image_data_list, label_data_list, self.input_size, self.batch_size)
+                val_data_batch, val_label_batch = get_image_and_label_batch(
+                    image_data_list, label_data_list, self.input_size, self.batch_size)
 
                 # update network
                 _, train_loss = self.sess.run(
                     [optimizer, self.total_loss],
                     feed_dict={self.input_image: train_data_batch,
                                self.input_ground_truth: train_label_batch})
-
+                '''Summary'''
                 val_loss = self.total_loss.eval({self.input_image: val_data_batch,
                                                  self.input_ground_truth: val_label_batch})
                 val_prediction = self.sess.run(self.predicted_label,
                                                feed_dict={self.input_image: val_label_batch})
+                # print(np.unique(train_label_batch))
+                # print(np.unique(val_prediction))
+                '''Dice?'''
+                loss_log.write('%s %s\n' % (train_loss, val_loss))
+                print(
+                    'Epoch: [%2d] time: %4.4f, train_loss: %.8f, val_loss: %.8f'
+                    % (epoch, time.time() - start_time, train_loss, val_loss)
+                )
 
 
 if __name__ == '__main__':
