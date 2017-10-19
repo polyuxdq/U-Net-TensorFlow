@@ -124,4 +124,4 @@ def conv_bn_relu_x3(inputs, output_channels, kernel_size, stride, is_training, n
         z_out = conv_bn_relu(z_out, output_channels, kernel_size, stride, is_training, name='dense3',
                              padding=padding, use_bias=use_bias)
     return z+z_out
-    # inpust -> z -> z_out -> z_out + z
+    # input -> z -> z_out -> z_out + z

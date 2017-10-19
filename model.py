@@ -1,4 +1,7 @@
 from conv_def import *
+from glob import glob
+import numpy as np
+import time
 
 
 class Unet3D(object):
@@ -23,6 +26,9 @@ class Unet3D(object):
         self.total_weight_loss = None
         self.total_loss = None
 
+        self.trainable_variables = None
+        self.log_writer = None
+
         # predefined
         self.device = ['/gpu:0', '/gpu:1', '/cpu:0']
         self.sess = sess
@@ -32,6 +38,21 @@ class Unet3D(object):
         self.input_channels = parameter_dict['input_channels']
         self.output_size = parameter_dict['output_size']
         self.output_channels = parameter_dict['output_channels']
+        self.learning_rate = parameter_dict['learning_rate']
+        self.beta1 = parameter_dict['beta1']
+        self.epoch = parameter_dict['epoch']
+        self.train_data_dir = parameter_dict['train_data_dir']
+        self.test_data_dir = parameter_dict['test_data_dir']
+        self.label_data_dir = parameter_dict['label_data_dir']
+        self.model_name = parameter_dict['model_name']
+        self.check_point_dir = parameter_dict['check_point_dir']
+
+        # from previous version
+        self.resize_r = parameter_dict['resize_r']
+        self.save_intval = parameter_dict['save_intval']
+        self.ovlp_ita = parameter_dict['ovlp_ita']
+        self.rename_map = parameter_dict['rename_map']
+        self.rename_map = [int(s) for s in self.rename_map.split(',')]
 
         # build model
         self.build_model()
@@ -173,8 +194,8 @@ class Unet3D(object):
                                                                         self.input_size, self.input_size],
                                                  name='input_target')
         # probability
-        self.predicted_prob, self.predicted_label, self.auxiliary1_prob_1x,\
-        self.auxiliary2_prob_1x, self.auxiliary3_prob_1x = self.unet_model(self.input_image)
+        self.predicted_prob, self.predicted_label, self.auxiliary1_prob_1x, \
+            self.auxiliary2_prob_1x, self.auxiliary3_prob_1x = self.unet_model(self.input_image)
 
         # dice loss
         self.main_dice_loss = self.dice_loss(self.predicted_prob, self.input_ground_truth)
@@ -198,6 +219,45 @@ class Unet3D(object):
             self.auxiliary3_weight_loss * 0.3
 
         self.total_loss = self.total_dice_loss * 100.0 + self.total_weight_loss
+
+        # trainable variables
+        self.trainable_variables = tf.trainable_variables()
+
+        '''No Save Module'''
+
+    def train(self):
+        optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate, beta1=self.beta1).minimize(
+            self.total_loss, var_list=self.trainable_variables
+        )
+
+        # initialization
+        variables_initialization = tf.global_variables_initializer()
+        self.sess.run(variables_initialization)
+
+        # save log
+        self.log_writer = tf.summary.FileWriter(logdir='./logs/', graph=self.sess.graph)
+
+        # load all volume files
+        pair_list = glob(pathname='{}/*.nii.gz'.format(self.train_data_dir))
+        pair_list.sort()
+        '''Something related to read file'''
+        with open(file='loss.txt', mode='w') as loss_log:
+            for epoch in np.arange(self.epoch):
+                start_time = time.time()
+
+                train_data_batch, train_label_batch = ['something', 'related to get batch']
+                val_data_batch, val_label_batch = ['something', 'related to get batch']
+
+                # update network
+                _, train_loss = self.sess.run(
+                    [optimizer, self.total_loss],
+                    feed_dict={self.input_image: train_data_batch,
+                               self.input_ground_truth: train_label_batch})
+
+                val_loss = self.total_loss.eval({self.input_image: val_data_batch,
+                                                 self.input_ground_truth: val_label_batch})
+                val_prediction = self.sess.run(self.predicted_label,
+                                               feed_dict={self.input_image: val_label_batch})
 
 
 if __name__ == '__main__':
