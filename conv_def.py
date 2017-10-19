@@ -101,6 +101,7 @@ def deconv3d(inputs, output_channels, name='deconv'):
     return deconv
 
 
+# 3D Deconvolution, Batch normalization, ReLU unit
 def deconv_bn_relu(inputs, output_channels, is_training, name):
     with tf.variable_scope(name):
         deconv = deconv3d(inputs=inputs, output_channels=output_channels, name="deconv")
@@ -112,6 +113,7 @@ def deconv_bn_relu(inputs, output_channels, is_training, name):
     return relu
 
 
+# 3 Units of conv_bn_relu with combined output, why?
 def conv_bn_relu_x3(inputs, output_channels, kernel_size, stride, is_training, name,
                     padding='same', use_bias=False):
     with tf.variable_scope(name):
