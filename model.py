@@ -31,7 +31,8 @@ class Unet3D(object):
         self.log_writer = None
 
         # predefined
-        self.device = ['/gpu:0', '/gpu:1', '/cpu:0']
+        # single-gpu
+        self.device = ['/gpu:0', '/gpu:0', '/cpu:0']
         self.sess = sess
         self.phase = parameter_dict['phase']
         self.batch_size = parameter_dict['batch_size']
