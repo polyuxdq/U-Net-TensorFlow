@@ -107,10 +107,11 @@ if __name__ == '__main__':
     print(label_list)
     # load test
     image_data_list, label_data_list = load_image_and_label(image_list, label_list, 1)
-    print('images loaded')
+    print('images loaded...')
     # Testing batch
     for i in range(1):
-        image_batch, label_batch = get_image_and_label_batch(image_data_list, label_data_list, 3, 1, 1)
+        image_batch, label_batch = get_image_and_label_batch(image_data_list, label_data_list, input_size=96,
+                                                             batch_size=1, channel=1)
         print('data')
         print(image_batch)
         print('label')

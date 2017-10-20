@@ -50,8 +50,8 @@ class Unet3D(object):
         self.resize_coefficient = parameter_dict['resize_coefficient']
 
         # from previous version
-        self.save_intval = parameter_dict['save_intval']
-        self.ovlp_ita = parameter_dict['ovlp_ita']
+        self.save_interval = parameter_dict['save_interval']
+        self.cube_overlapping_factor = parameter_dict['cube_overlapping_factor']
 
         # build model
         self.build_model()
@@ -120,9 +120,9 @@ class Unet3D(object):
             concat_1 = tf.concat([deconv1, encoder1_2], axis=concat_dimension, name='concat_1')
             decoder1_1 = conv_bn_relu(inputs=concat_1, output_channels=64, kernel_size=3, stride=1,
                                       is_training=is_training, name='decoder1_1')
-            decoder2_2 = conv_bn_relu(inputs=decoder1_1, output_channels=64, kernel_size=3, stride=1,
+            decoder1_2 = conv_bn_relu(inputs=decoder1_1, output_channels=64, kernel_size=3, stride=1,
                                       is_training=is_training, name='decoder1_2')
-            feature = decoder2_2
+            feature = decoder1_2
             # predicted probability
             predicted_prob = conv3d(inputs=feature, output_channels=self.output_channels, kernel_size=1,
                                     stride=1, use_bias=True, name='predicted_prob')
@@ -150,6 +150,7 @@ class Unet3D(object):
             auxiliary1_prob_1x = deconv3d(inputs=auxiliary1_prob_2x, output_channels=self.output_channels,
                                           name='auxiliary1_prob_1x')
 
+        # device: cpu0
         with tf.device(device_name_or_function=self.device[2]):
             softmax_prob = tf.nn.softmax(logits=predicted_prob, name='softmax_prob')
             predicted_label = tf.argmax(input=softmax_prob, axis=4, name='argmax')
@@ -162,7 +163,8 @@ class Unet3D(object):
         ground_truth = tf.one_hot(indices=ground_truth, depth=3)
         dice = 0
         for i in range(3):
-            intersection = tf.reduce_sum(prediction[:, :, :, :, i] * ground_truth[:, :, :, :, i])
+            # reduce_mean calculation
+            intersection = tf.reduce_mean(prediction[:, :, :, :, i] * ground_truth[:, :, :, :, i])
             union_prediction = tf.reduce_sum(prediction[:, :, :, :, i] * prediction[:, :, :, :, i])
             union_ground_truth = tf.reduce_sum(ground_truth[:, :, :, :, i] * ground_truth[:, :, :, :, i])
             union = union_ground_truth + union_prediction
@@ -188,7 +190,7 @@ class Unet3D(object):
         # input data and labels
         self.input_image = tf.placeholder(dtype=tf.float32,
                                           shape=[self.batch_size, self.input_size, self.input_size,
-                                                 self.input_size, self.input_channels], name='intput_image')
+                                                 self.input_size, self.input_channels], name='input_image')
         self.input_ground_truth = tf.placeholder(dtype=tf.int32, shape=[self.batch_size, self.input_size,
                                                                         self.input_size, self.input_size],
                                                  name='input_target')
