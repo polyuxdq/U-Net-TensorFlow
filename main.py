@@ -18,7 +18,7 @@ def init_parameter(name):
     parameter_dict['output_channels'] = 3
     parameter_dict['learning_rate'] = 0.001
     parameter_dict['beta1'] = 0.5
-    parameter_dict['epoch'] = 100
+    parameter_dict['epoch'] = 200
     parameter_dict['train_data_dir'] = "../hvsmr/data/"
     parameter_dict['test_data_dir'] = "../hvsmr/data/"
     parameter_dict['label_data_dir'] = "../hvsmr/label"
