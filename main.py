@@ -19,10 +19,10 @@ def init_parameter(name):
     parameter_dict['learning_rate'] = 0.001
     parameter_dict['beta1'] = 0.5
     parameter_dict['epoch'] = 100
-    parameter_dict['train_data_dir'] = "/Users/dqxu/PycharmProjects/Master-PyTorch/data/data"
-    parameter_dict['test_data_dir'] = "/Users/dqxu/PycharmProjects/Master-PyTorch/data/data"
-    parameter_dict['label_data_dir'] = "/Users/dqxu/PycharmProjects/Master-PyTorch/data/label"
-    parameter_dict['model_name'] = "hvmsr_" + name + ".model"
+    parameter_dict['train_data_dir'] = "../hvsmr/data/"
+    parameter_dict['test_data_dir'] = "../hvsmr/data/"
+    parameter_dict['label_data_dir'] = "../hvsmr/label"
+    parameter_dict['model_name'] = "hvsmr_" + name + ".model"
     parameter_dict['check_point_dir'] = "."
     parameter_dict['resize_coefficient'] = 1.0
     # from previous version

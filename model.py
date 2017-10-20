@@ -236,7 +236,7 @@ class Unet3D(object):
         self.sess.run(variables_initialization)
 
         # save log
-        self.log_writer = tf.summary.FileWriter(logdir='./logs/', graph=self.sess.graph)
+        self.log_writer = tf.summary.FileWriter(logdir='../logs/', graph=self.sess.graph)
 
         # load all volume files
         image_list = glob(pathname='{}/*.nii.gz'.format(self.train_data_dir))
