@@ -244,7 +244,8 @@ class Unet3D(object):
         label_list = glob(pathname='{}/*.nii.gz'.format(self.label_data_dir))
         image_data_list, label_data_list = load_image_and_label(image_list, label_list, self.resize_coefficient)
 
-        with open(file='loss.txt', mode='w') as loss_log:
+        line_buffer = 1
+        with open(file='loss.txt', mode='w', buffering=line_buffer) as loss_log:
             for epoch in np.arange(self.epoch):
                 start_time = time.time()
 
@@ -264,11 +265,18 @@ class Unet3D(object):
                                                  self.input_ground_truth: val_label_batch})
                 val_prediction = self.sess.run(self.predicted_label,
                                                feed_dict={self.input_image: val_data_batch})
-                print(np.unique(train_label_batch))
-                print(np.unique(val_label_batch))
-                print(np.unique(val_prediction))
+
+                loss_log.write(str(np.unique(train_label_batch)))
+                loss_log.write(str(np.unique(val_label_batch)))
+                loss_log.write(str(np.unique(val_prediction)))
                 '''Dice?'''
-                loss_log.write('%s %s\n' % (train_loss, val_loss))
+                # loss_log.write('%s %s\n' % (train_loss, val_loss))
+
+                loss_log.write(
+                    'Epoch: [%2d] time: %4.4f, train_loss: %.8f, val_loss: %.8f'
+                    % (epoch, time.time() - start_time, train_loss, val_loss)
+                )
+
                 print(
                     'Epoch: [%2d] time: %4.4f, train_loss: %.8f, val_loss: %.8f'
                     % (epoch, time.time() - start_time, train_loss, val_loss)
