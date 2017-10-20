@@ -1,0 +1,1003 @@
+Script started on Fri 20 Oct 2017 05:45:48 PM UTC
+]0;ec2-user@ip-172-31-40-141:~/U-Net-TensorFlow[?1034h[ec2-user@ip-172-31-40-141 U-Net-TensorFlow]$ python main.py 
+{
+    "batch_size": 1,
+    "train_data_dir": "../hvsmr/data/",
+    "output_size": 96,
+    "save_interval": 2000,
+    "model_name": "hvsmr_test_2017-10-20_17:46:00.model",
+    "check_point_dir": ".",
+    "learning_rate": 0.001,
+    "output_channels": 3,
+    "cube_overlapping_factor": 4,
+    "resize_coefficient": 1.0,
+    "input_size": 96,
+    "test_data_dir": "../hvsmr/data/",
+    "input_channels": 1,
+    "label_data_dir": "../hvsmr/label",
+    "epoch": 200,
+    "phase": "train",
+    "beta1": 0.5
+}
+2017-10-20 17:46:00.983071: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-20 17:46:00.983095: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-20 17:46:00.983101: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-20 17:46:00.983110: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-20 17:46:00.983114: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-20 17:46:01.096763: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:893] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2017-10-20 17:46:01.097273: I tensorflow/core/common_runtime/gpu/gpu_device.cc:955] Found device 0 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:00:1e.0
+Total memory: 11.17GiB
+Free memory: 11.11GiB
+2017-10-20 17:46:01.097301: I tensorflow/core/common_runtime/gpu/gpu_device.cc:976] DMA: 0 
+2017-10-20 17:46:01.097315: I tensorflow/core/common_runtime/gpu/gpu_device.cc:986] 0:   Y 
+2017-10-20 17:46:01.097329: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K80, pci bus id: 0000:00:1e.0)
+[0]
+[0 1 2]
+Epoch: [ 0] time: 29.6323, train_loss: 0.00000247, val_loss: -0.00000319
+[0]
+[0 1 2]
+Epoch: [ 1] time: 13.9042, train_loss: -0.00000307, val_loss: 0.00049783
+[0]
+[0 1 2]
+Epoch: [ 2] time: 13.8900, train_loss: -0.00001034, val_loss: 1.36001873
+[0]
+[0 1 2]
+Epoch: [ 3] time: 13.9498, train_loss: -0.00001841, val_loss: -0.00002506
+[0 1 2]
+[0 1 2]
+Epoch: [ 4] time: 13.9864, train_loss: 1.01181483, val_loss: -0.00002265
+[0 1 2]
+[0 1 2]
+Epoch: [ 5] time: 14.0136, train_loss: 1.90742803, val_loss: -0.00002198
+[0]
+[0 1 2]
+Epoch: [ 6] time: 13.9844, train_loss: -0.00002722, val_loss: -0.00002389
+[0 1 2]
+[0 1 2]
+Epoch: [ 7] time: 14.0314, train_loss: 0.05503964, val_loss: -0.00002654
+[0]
+[0 1 2]
+Epoch: [ 8] time: 14.0513, train_loss: -0.00002660, val_loss: -0.00002091
+[0 1 2]
+[0 1 2]
+Epoch: [ 9] time: 14.0552, train_loss: 1.25867438, val_loss: -0.00003222
+[0 1 2]
+[0 1 2]
+Epoch: [10] time: 14.0847, train_loss: 0.56623447, val_loss: -0.00003780
+[0]
+[0 1 2]
+Epoch: [11] time: 14.0880, train_loss: -0.00003841, val_loss: -0.00004119
+[0]
+[0 1 2]
+Epoch: [12] time: 14.0827, train_loss: -0.00003550, val_loss: 0.04096375
+[0 1]
+[0 1 2]
+Epoch: [13] time: 14.0248, train_loss: 0.00003331, val_loss: 0.46319216
+[0 1 2]
+[0 1 2]
+Epoch: [14] time: 14.1146, train_loss: 0.02709270, val_loss: -0.00003913
+[0]
+[0 1 2]
+Epoch: [15] time: 14.0809, train_loss: -0.00004100, val_loss: 0.97126377
+[0 1 2]
+[0 1 2]
+Epoch: [16] time: 14.1095, train_loss: 1.54272342, val_loss: 0.49149331
+[0 1 2]
+[0 1 2]
+Epoch: [17] time: 14.1259, train_loss: 0.06235985, val_loss: -0.00005864
+[0 2]
+[0 1 2]
+Epoch: [18] time: 14.1171, train_loss: 0.08781970, val_loss: 1.53160584
+[0 1 2]
+[0 1 2]
+Epoch: [19] time: 14.1266, train_loss: 0.02708838, val_loss: 0.90887547
+[0 1 2]
+[0 1 2]
+Epoch: [20] time: 14.0786, train_loss: 0.18700624, val_loss: -0.00006316
+[0]
+[0 1 2]
+Epoch: [21] time: 14.0736, train_loss: -0.00006456, val_loss: 0.42406800
+[0]
+[0 1 2]
+Epoch: [22] time: 14.1605, train_loss: -0.00006751, val_loss: -0.00006539
+[0]
+[0 1 2]
+Epoch: [23] time: 14.1280, train_loss: -0.00007026, val_loss: 1.57247186
+^CTraceback (most recent call last):
+  File "main.py", line 59, in <module>
+    tf.app.run()
+  File "/home/ec2-user/src/anaconda3/lib/python3.5/site-packages/tensorflow/python/platform/app.py", line 48, in run
+    _sys.exit(main(_sys.argv[:1] + flags_passthrough))
+  File "main.py", line 55, in main
+    model.train()
+  File "/home/ec2-user/U-Net-TensorFlow/model.py", line 261, in train
+    self.input_ground_truth: train_label_batch})
+  File "/home/ec2-user/src/anaconda3/lib/python3.5/site-packages/tensorflow/python/client/session.py", line 895, in run
+    run_metadata_ptr)
+  File "/home/ec2-user/src/anaconda3/lib/python3.5/site-packages/tensorflow/python/client/session.py", line 1124, in _run
+    feed_dict_tensor, options, run_metadata)
+  File "/home/ec2-user/src/anaconda3/lib/python3.5/site-packages/tensorflow/python/client/session.py", line 1321, in _do_run
+    options, run_metadata)
+  File "/home/ec2-user/src/anaconda3/lib/python3.5/site-packages/tensorflow/python/client/session.py", line 1327, in _do_call
+    return fn(*args)
+  File "/home/ec2-user/src/anaconda3/lib/python3.5/site-packages/tensorflow/python/client/session.py", line 1306, in _run_fn
+    status, run_metadata)
+KeyboardInterrupt
+git]0;ec2-user@ip-172-31-40-141:~/U-Net-TensorFlow[ec2-user@ip-172-31-40-141 U-Net-TensorFlow]$ git pull
+remote: Counting objects: 5, done.[K
+remote: Compressing objects: 100% (1/1)   [Kremote: Compressing objects: 100% (1/1), done.[K
+remote: Total 5 (delta 4), reused 5 (delta 4), pack-reused 0[K
+Unpacking objects:  20% (1/5)   Unpacking objects:  40% (2/5)   Unpacking objects:  60% (3/5)   Unpacking objects:  80% (4/5)   Unpacking objects: 100% (5/5)   Unpacking objects: 100% (5/5), done.
+From https://github.com/polyuxdq/U-Net-TensorFlow
+   ad65481..0caef96  master     -> origin/master
+Updating ad65481..0caef96
+Fast-forward
+ .idea/workspace.xml | 49 [32m++++++++++++++++++++++++[m[31m-------------------------[m
+ model.py            |  1 [32m+[m
+ 2 files changed, 25 insertions(+), 25 deletions(-)
+]0;ec2-user@ip-172-31-40-141:~/U-Net-TensorFlow[ec2-user@ip-172-31-40-141 U-Net-TensorFlow]$ python main.py 
+{
+    "cube_overlapping_factor": 4,
+    "output_size": 96,
+    "batch_size": 1,
+    "learning_rate": 0.001,
+    "train_data_dir": "../hvsmr/data/",
+    "output_channels": 3,
+    "check_point_dir": ".",
+    "resize_coefficient": 1.0,
+    "input_channels": 1,
+    "save_interval": 2000,
+    "input_size": 96,
+    "test_data_dir": "../hvsmr/data/",
+    "epoch": 200,
+    "label_data_dir": "../hvsmr/label",
+    "model_name": "hvsmr_test_2017-10-20_17:52:45.model",
+    "beta1": 0.5,
+    "phase": "train"
+}
+2017-10-20 17:52:45.689720: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-20 17:52:45.689744: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-20 17:52:45.689752: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-20 17:52:45.689766: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-20 17:52:45.689775: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-20 17:52:45.805771: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:893] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2017-10-20 17:52:45.806307: I tensorflow/core/common_runtime/gpu/gpu_device.cc:955] Found device 0 with properties: 
+name: Tesla K80
+major: 3 minor: 7 memoryClockRate (GHz) 0.8235
+pciBusID 0000:00:1e.0
+Total memory: 11.17GiB
+Free memory: 11.11GiB
+2017-10-20 17:52:45.806336: I tensorflow/core/common_runtime/gpu/gpu_device.cc:976] DMA: 0 
+2017-10-20 17:52:45.806351: I tensorflow/core/common_runtime/gpu/gpu_device.cc:986] 0:   Y 
+2017-10-20 17:52:45.806369: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K80, pci bus id: 0000:00:1e.0)
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [ 0] time: 29.9759, train_loss: 0.00000697, val_loss: 1.27138567
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [ 1] time: 14.0290, train_loss: 1.12873268, val_loss: 0.89436466
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [ 2] time: 14.0540, train_loss: 1.96352339, val_loss: 0.00000052
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [ 3] time: 14.0547, train_loss: 1.59662390, val_loss: -0.00000168
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [ 4] time: 14.0525, train_loss: -0.00000062, val_loss: 0.45361105
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [ 5] time: 14.0604, train_loss: 0.00139670, val_loss: -0.00000213
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [ 6] time: 14.1634, train_loss: -0.00000156, val_loss: 1.43441308
+[0]
+[0]
+[0 1 2]
+Epoch: [ 7] time: 14.1002, train_loss: -0.00000143, val_loss: -0.00000254
+[0]
+[0]
+[0 1 2]
+Epoch: [ 8] time: 14.0791, train_loss: -0.00000429, val_loss: -0.00000150
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [ 9] time: 14.1424, train_loss: -0.00000353, val_loss: 0.74968100
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [10] time: 14.1580, train_loss: 1.88230038, val_loss: 0.00000029
+[0]
+[0]
+[0 1 2]
+Epoch: [11] time: 14.1047, train_loss: 0.00000068, val_loss: -0.00000104
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [12] time: 14.1151, train_loss: 1.59857666, val_loss: 0.25854596
+[0]
+[0]
+[0 1 2]
+Epoch: [13] time: 14.1165, train_loss: -0.00000029, val_loss: -0.00000460
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [14] time: 14.1207, train_loss: -0.00000336, val_loss: 0.88941681
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [15] time: 14.1222, train_loss: 1.71067166, val_loss: -0.00000571
+[0]
+[0 2]
+[0 1 2]
+Epoch: [16] time: 14.1078, train_loss: -0.00000710, val_loss: 0.00158704
+[0]
+[0]
+[0 1 2]
+Epoch: [17] time: 14.1555, train_loss: -0.00000696, val_loss: -0.00000741
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [18] time: 14.1547, train_loss: 1.73846531, val_loss: -0.00000894
+[0]
+[0]
+[0 1 2]
+Epoch: [19] time: 14.1202, train_loss: -0.00001178, val_loss: -0.00000548
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [20] time: 14.1645, train_loss: 1.55661082, val_loss: 1.58976352
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [21] time: 14.1505, train_loss: 0.09214575, val_loss: -0.00000278
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [22] time: 14.1179, train_loss: -0.00000444, val_loss: 1.60135221
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [23] time: 14.1207, train_loss: -0.00000280, val_loss: 1.70088685
+[0 2]
+[0]
+[0 1 2]
+Epoch: [24] time: 14.1218, train_loss: 0.23380224, val_loss: -0.00000883
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [25] time: 14.1392, train_loss: 0.54866004, val_loss: 1.02835846
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [26] time: 14.1320, train_loss: 0.27717802, val_loss: -0.00000733
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [27] time: 14.1495, train_loss: 0.24437425, val_loss: 0.46078154
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [28] time: 14.1594, train_loss: -0.00001113, val_loss: 0.03377598
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [29] time: 14.1668, train_loss: 0.28368556, val_loss: -0.00002380
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [30] time: 14.1660, train_loss: -0.00001900, val_loss: 1.14168990
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [31] time: 14.1406, train_loss: 0.87809986, val_loss: -0.00003313
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [32] time: 14.1065, train_loss: -0.00003184, val_loss: 0.00184113
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [33] time: 14.1286, train_loss: -0.00002568, val_loss: 1.15788078
+[0]
+[0 2]
+[0 1 2]
+Epoch: [34] time: 14.1167, train_loss: -0.00002687, val_loss: 0.00009931
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [35] time: 14.0768, train_loss: -0.00003216, val_loss: 0.11127540
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [36] time: 14.1116, train_loss: -0.00002982, val_loss: 0.43707070
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [37] time: 14.1484, train_loss: 0.74603969, val_loss: -0.00002641
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [38] time: 14.1289, train_loss: 0.00254192, val_loss: -0.00003356
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [39] time: 14.1289, train_loss: -0.00002922, val_loss: 0.80614674
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [40] time: 14.1316, train_loss: -0.00003161, val_loss: 0.65844965
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [41] time: 14.1256, train_loss: 0.01829699, val_loss: -0.00003290
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [42] time: 14.2019, train_loss: 0.78395170, val_loss: -0.00003169
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [43] time: 14.1467, train_loss: 0.86516589, val_loss: 1.18372917
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [44] time: 14.1555, train_loss: -0.00001791, val_loss: 0.94815052
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [45] time: 14.0940, train_loss: 0.27700016, val_loss: 0.60423219
+[0]
+[0 2]
+[0 1 2]
+Epoch: [46] time: 14.1245, train_loss: -0.00002216, val_loss: 0.18013093
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [47] time: 14.1230, train_loss: -0.00002647, val_loss: 1.33090353
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [48] time: 14.1447, train_loss: -0.00002370, val_loss: 0.70149541
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [49] time: 14.1979, train_loss: 1.24184251, val_loss: -0.00001675
+[0 2]
+[0]
+[0 1 2]
+Epoch: [50] time: 14.1174, train_loss: 0.00442851, val_loss: -0.00001878
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [51] time: 14.1430, train_loss: -0.00002651, val_loss: 1.57210410
+[0 2]
+[0 1 2]
+[0 1 2]
+Epoch: [52] time: 14.1450, train_loss: 0.38775328, val_loss: 0.91354018
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [53] time: 14.1460, train_loss: 1.12110817, val_loss: -0.00004465
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [54] time: 14.1525, train_loss: -0.00004261, val_loss: 0.66413391
+[0 1]
+[0 1 2]
+[0 1 2]
+Epoch: [55] time: 14.1337, train_loss: 0.00038643, val_loss: 0.27341291
+[0 1 2]
+[0 2]
+[0 1 2]
+Epoch: [56] time: 14.1184, train_loss: 0.89011377, val_loss: 0.11210463
+[0]
+[0]
+[0 1 2]
+Epoch: [57] time: 14.1632, train_loss: -0.00005427, val_loss: -0.00007090
+[0 1 2]
+[0 2]
+[0 1 2]
+Epoch: [58] time: 14.1415, train_loss: 0.17817788, val_loss: 0.10517915
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [59] time: 14.2149, train_loss: 0.46199095, val_loss: 0.74874067
+[0]
+[0]
+[0 1 2]
+Epoch: [60] time: 14.2189, train_loss: -0.00006627, val_loss: -0.00006050
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [61] time: 14.0941, train_loss: -0.00005218, val_loss: 0.83589011
+[0]
+[0]
+[0 1 2]
+Epoch: [62] time: 14.1534, train_loss: -0.00006172, val_loss: -0.00005452
+[0 2]
+[0]
+[0 1 2]
+Epoch: [63] time: 14.1462, train_loss: 0.20423286, val_loss: -0.00007438
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [64] time: 14.1156, train_loss: 0.72448605, val_loss: -0.00008141
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [65] time: 14.2063, train_loss: 1.47811091, val_loss: 1.15208721
+[0 1 2]
+[0]
+[0 2]
+Epoch: [66] time: 14.1577, train_loss: 0.32927033, val_loss: -0.00008435
+[0 1 2]
+[0 1 2]
+[0 2]
+Epoch: [67] time: 14.1596, train_loss: 0.15964651, val_loss: 0.34651402
+[0]
+[0 1]
+[0 1 2]
+Epoch: [68] time: 14.1275, train_loss: -0.00008854, val_loss: 0.00226847
+[0]
+[0]
+[0 2]
+Epoch: [69] time: 14.1014, train_loss: -0.00008284, val_loss: -0.00009679
+[0 2]
+[0 1 2]
+[0 1 2]
+Epoch: [70] time: 14.1826, train_loss: 0.11437444, val_loss: 1.31058931
+[0]
+[0 1 2]
+[0 2]
+Epoch: [71] time: 14.1385, train_loss: -0.00009331, val_loss: 0.53955823
+[0]
+[0 1 2]
+[0 2]
+Epoch: [72] time: 14.1684, train_loss: -0.00010083, val_loss: 0.72846204
+[0 1 2]
+[0 1 2]
+[0 2]
+Epoch: [73] time: 14.1873, train_loss: 0.35469517, val_loss: 0.21210583
+[0]
+[0]
+[0 2]
+Epoch: [74] time: 14.1548, train_loss: -0.00009059, val_loss: -0.00010892
+[0]
+[0 1 2]
+[0 2]
+Epoch: [75] time: 14.1124, train_loss: -0.00011482, val_loss: 0.83755308
+[0 1 2]
+[0 2]
+[0 2]
+Epoch: [76] time: 14.1929, train_loss: 0.43714991, val_loss: 0.05166683
+[0 1 2]
+[0 1 2]
+[0 2]
+Epoch: [77] time: 14.1938, train_loss: 0.07941075, val_loss: 0.64536464
+[0 1 2]
+[0 1 2]
+[0 2]
+Epoch: [78] time: 14.1836, train_loss: 1.04779923, val_loss: 1.13739264
+[0]
+[0 1 2]
+[0 2]
+Epoch: [79] time: 14.0734, train_loss: -0.00011321, val_loss: 0.92733485
+[0 1 2]
+[0 1 2]
+[0 2]
+Epoch: [80] time: 14.1601, train_loss: 0.63024831, val_loss: 0.42595342
+[0 2]
+[0]
+[0 2]
+Epoch: [81] time: 14.1514, train_loss: 0.05210354, val_loss: -0.00011376
+[0 1 2]
+[0]
+[0 2]
+Epoch: [82] time: 14.1556, train_loss: 0.00956950, val_loss: -0.00010224
+[0]
+[0]
+[0 2]
+Epoch: [83] time: 14.1110, train_loss: -0.00010009, val_loss: -0.00010649
+[0 2]
+[0]
+[0 2]
+Epoch: [84] time: 14.1859, train_loss: 0.00050402, val_loss: -0.00009470
+[0]
+[0]
+[0 2]
+Epoch: [85] time: 14.0887, train_loss: -0.00010179, val_loss: -0.00010640
+[0 1 2]
+[0 1 2]
+[0 2]
+Epoch: [86] time: 14.1202, train_loss: 0.77878934, val_loss: 1.18435824
+[0 2]
+[0]
+[0 2]
+Epoch: [87] time: 14.1153, train_loss: 0.02411866, val_loss: -0.00011621
+[0 2]
+[0]
+[0 2]
+Epoch: [88] time: 14.1620, train_loss: 0.00096857, val_loss: -0.00011507
+[0]
+[0]
+[0 2]
+Epoch: [89] time: 14.1168, train_loss: -0.00014066, val_loss: -0.00014170
+[0]
+[0 1 2]
+[0 2]
+Epoch: [90] time: 14.1869, train_loss: -0.00012734, val_loss: 1.22543001
+[0]
+[0]
+[0 2]
+Epoch: [91] time: 14.0969, train_loss: -0.00013585, val_loss: -0.00013550
+[0 1 2]
+[0 1 2]
+[0 2]
+Epoch: [92] time: 14.1611, train_loss: 0.53882861, val_loss: 0.30868313
+[0 2]
+[0 1 2]
+[0 1 2]
+Epoch: [93] time: 14.1462, train_loss: 0.01062933, val_loss: 0.15163483
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [94] time: 14.1711, train_loss: 0.63926858, val_loss: 0.20980661
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [95] time: 14.1543, train_loss: 0.20061117, val_loss: -0.00012486
+[0 1]
+[0 1 2]
+[0 1 2]
+Epoch: [96] time: 14.1277, train_loss: 0.01032324, val_loss: 1.13308716
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [97] time: 14.2044, train_loss: 1.31258023, val_loss: 0.68960243
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [98] time: 14.1580, train_loss: -0.00010363, val_loss: 0.52149177
+[0]
+[0]
+[0 1 2]
+Epoch: [99] time: 14.1208, train_loss: -0.00011738, val_loss: -0.00009825
+[0]
+[0]
+[0 1 2]
+Epoch: [100] time: 14.1334, train_loss: -0.00010140, val_loss: -0.00011552
+[0]
+[0]
+[0 1 2]
+Epoch: [101] time: 14.1420, train_loss: -0.00009678, val_loss: -0.00011444
+[0]
+[0]
+[0 1 2]
+Epoch: [102] time: 14.1033, train_loss: -0.00011614, val_loss: -0.00012099
+[0 1]
+[0 2]
+[0 1 2]
+Epoch: [103] time: 14.1252, train_loss: 0.00999213, val_loss: 0.10515429
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [104] time: 14.2113, train_loss: 1.53244328, val_loss: 0.53257447
+[0 2]
+[0]
+[0 1 2]
+Epoch: [105] time: 14.0992, train_loss: 0.10636299, val_loss: -0.00009118
+[0]
+[0 1 2]
+[0 2]
+Epoch: [106] time: 14.1925, train_loss: -0.00009418, val_loss: 0.02962471
+[0 2]
+[0]
+[0 1 2]
+Epoch: [107] time: 14.1457, train_loss: 0.04414641, val_loss: -0.00006746
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [108] time: 14.1278, train_loss: -0.00008959, val_loss: 0.89136726
+[0 1 2]
+[0 2]
+[0 1 2]
+Epoch: [109] time: 14.1480, train_loss: 1.01707733, val_loss: 0.02330343
+[0]
+[0 1]
+[0 1 2]
+Epoch: [110] time: 14.1005, train_loss: -0.00009927, val_loss: 0.08759999
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [111] time: 14.1887, train_loss: 0.35865414, val_loss: -0.00009670
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [112] time: 14.1504, train_loss: -0.00009431, val_loss: 1.31395292
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [113] time: 14.1756, train_loss: 0.84501827, val_loss: -0.00010202
+[0 1 2]
+[0 2]
+[0 1 2]
+Epoch: [114] time: 14.1561, train_loss: 0.24747917, val_loss: 0.17580260
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [115] time: 14.1267, train_loss: -0.00010290, val_loss: 0.82923758
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [116] time: 14.1496, train_loss: 1.38373959, val_loss: 0.61749053
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [117] time: 14.1085, train_loss: 0.17581931, val_loss: -0.00008013
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [118] time: 14.1422, train_loss: -0.00009255, val_loss: 0.04139566
+[0 1 2]
+[0 2]
+[0 1 2]
+Epoch: [119] time: 14.1271, train_loss: 0.31351966, val_loss: 0.00423072
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [120] time: 14.0799, train_loss: -0.00007654, val_loss: 0.09598663
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [121] time: 14.1430, train_loss: -0.00009565, val_loss: 0.49781579
+[0 2]
+[0]
+[0 1 2]
+Epoch: [122] time: 14.1406, train_loss: 0.13554928, val_loss: -0.00007980
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [123] time: 14.1293, train_loss: 0.50833333, val_loss: 1.09184110
+[0]
+[0]
+[0 1 2]
+Epoch: [124] time: 14.0702, train_loss: -0.00011990, val_loss: -0.00011898
+[0 1 2]
+[0]
+[0 2]
+Epoch: [125] time: 14.1575, train_loss: 0.04903912, val_loss: -0.00013102
+[0]
+[0]
+[0 1 2]
+Epoch: [126] time: 14.1084, train_loss: -0.00011920, val_loss: -0.00009252
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [127] time: 14.2023, train_loss: 1.06198597, val_loss: -0.00013024
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [128] time: 14.1443, train_loss: 0.76502180, val_loss: 0.11238821
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [129] time: 14.1271, train_loss: -0.00008618, val_loss: 0.58695745
+[0]
+[0 2]
+[0 1 2]
+Epoch: [130] time: 14.1640, train_loss: -0.00010340, val_loss: 0.26267156
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [131] time: 14.1401, train_loss: 1.20532393, val_loss: 1.12818825
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [132] time: 14.0368, train_loss: -0.00010055, val_loss: 0.61471623
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [133] time: 14.0855, train_loss: -0.00006580, val_loss: 0.86220413
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [134] time: 14.1258, train_loss: -0.00010987, val_loss: 0.42986941
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [135] time: 14.1764, train_loss: 0.59169209, val_loss: 0.50922495
+[0]
+[0]
+[0 1 2]
+Epoch: [136] time: 14.0669, train_loss: -0.00010056, val_loss: -0.00011165
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [137] time: 14.1237, train_loss: 0.64070803, val_loss: 1.18201423
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [138] time: 14.1127, train_loss: 0.61069244, val_loss: -0.00009430
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [139] time: 14.1183, train_loss: -0.00011866, val_loss: 0.33342513
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [140] time: 14.1247, train_loss: 1.19404829, val_loss: -0.00009664
+[0]
+[0]
+[0 1 2]
+Epoch: [141] time: 14.0760, train_loss: -0.00012169, val_loss: -0.00009252
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [142] time: 14.0734, train_loss: 0.52045405, val_loss: -0.00009293
+[0]
+[0 2]
+[0 1 2]
+Epoch: [143] time: 14.0948, train_loss: -0.00010590, val_loss: 0.04026122
+[0]
+[0 1 2]
+[0 2]
+Epoch: [144] time: 14.0449, train_loss: -0.00011481, val_loss: 0.13973798
+[0 1 2]
+[0]
+[0 2]
+Epoch: [145] time: 14.0800, train_loss: 0.65814960, val_loss: -0.00011600
+[0]
+[0 1 2]
+[0 2]
+Epoch: [146] time: 14.0787, train_loss: -0.00010825, val_loss: 0.60859710
+[0]
+[0 1 2]
+[0 2]
+Epoch: [147] time: 14.0980, train_loss: -0.00011187, val_loss: 0.13409954
+[0]
+[0 2]
+[0 2]
+Epoch: [148] time: 14.0865, train_loss: -0.00010191, val_loss: 0.00412651
+[0 1 2]
+[0 2]
+[0 2]
+Epoch: [149] time: 14.1768, train_loss: 0.03659517, val_loss: 0.11923323
+[0 2]
+[0]
+[0 2]
+Epoch: [150] time: 14.1132, train_loss: 0.02421722, val_loss: -0.00009337
+[0]
+[0 1 2]
+[0 2]
+Epoch: [151] time: 14.1004, train_loss: -0.00010783, val_loss: 0.37020090
+[0]
+[0 2]
+[0 2]
+Epoch: [152] time: 14.1049, train_loss: -0.00011254, val_loss: 0.01943024
+[0 1 2]
+[0]
+[0 2]
+Epoch: [153] time: 14.1308, train_loss: 0.03874910, val_loss: -0.00011219
+[0 1 2]
+[0 1 2]
+[0 2]
+Epoch: [154] time: 14.1446, train_loss: 0.65273058, val_loss: 0.41887048
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [155] time: 14.1772, train_loss: -0.00011275, val_loss: 0.80226374
+[0 2]
+[0 1 2]
+[0 1 2]
+Epoch: [156] time: 14.1012, train_loss: 0.02504822, val_loss: 0.73466110
+[0]
+[0]
+[0 1 2]
+Epoch: [157] time: 14.0887, train_loss: -0.00010754, val_loss: -0.00010620
+[0 2]
+[0]
+[0 2]
+Epoch: [158] time: 14.1261, train_loss: 0.16993484, val_loss: -0.00010940
+[0]
+[0 2]
+[0 1 2]
+Epoch: [159] time: 14.1276, train_loss: -0.00010414, val_loss: 0.06217950
+[0]
+[0]
+[0 2]
+Epoch: [160] time: 14.1025, train_loss: -0.00010536, val_loss: -0.00012052
+[0 1 2]
+[0]
+[0 2]
+Epoch: [161] time: 14.1765, train_loss: 0.18111190, val_loss: -0.00012515
+[0 1 2]
+[0 2]
+[0 1 2]
+Epoch: [162] time: 14.1935, train_loss: 0.60276937, val_loss: 0.19323042
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [163] time: 14.1720, train_loss: 0.45450321, val_loss: -0.00012651
+[0 2]
+[0 1 2]
+[0 2]
+Epoch: [164] time: 14.1078, train_loss: 0.02117469, val_loss: 0.16146904
+[0]
+[0 1 2]
+[0 2]
+Epoch: [165] time: 14.1606, train_loss: -0.00015453, val_loss: 0.79390043
+[0 2]
+[0 1 2]
+[0 2]
+Epoch: [166] time: 14.1911, train_loss: 0.03830951, val_loss: 0.34006065
+[0]
+[0]
+[0 2]
+Epoch: [167] time: 14.0784, train_loss: -0.00012989, val_loss: -0.00013121
+[0]
+[0]
+[0 2]
+Epoch: [168] time: 14.1892, train_loss: -0.00015557, val_loss: -0.00011798
+[0 1 2]
+[0]
+[0 2]
+Epoch: [169] time: 14.0968, train_loss: 0.07630783, val_loss: -0.00015803
+[0]
+[0]
+[0 2]
+Epoch: [170] time: 14.0893, train_loss: -0.00014267, val_loss: -0.00014643
+[0]
+[0]
+[0 2]
+Epoch: [171] time: 14.1040, train_loss: -0.00013467, val_loss: -0.00015199
+[0 1 2]
+[0 1 2]
+[0 2]
+Epoch: [172] time: 14.1392, train_loss: 0.32445547, val_loss: 0.74139708
+[0 1 2]
+[0 1 2]
+[0 2]
+Epoch: [173] time: 14.1428, train_loss: 0.02534619, val_loss: 0.55562347
+[0 1 2]
+[0]
+[0 2]
+Epoch: [174] time: 14.1395, train_loss: 0.15299374, val_loss: -0.00015831
+[0 1 2]
+[0 1 2]
+[0 2]
+Epoch: [175] time: 14.1680, train_loss: 0.89667648, val_loss: 0.07693593
+[0]
+[0 2]
+[0 2]
+Epoch: [176] time: 14.1297, train_loss: -0.00012696, val_loss: 0.05139939
+[0]
+[0 1 2]
+[0 2]
+Epoch: [177] time: 14.1315, train_loss: -0.00014374, val_loss: 0.91744435
+[0]
+[0 1 2]
+[0 2]
+Epoch: [178] time: 14.1664, train_loss: -0.00012410, val_loss: 0.64542323
+[0]
+[0]
+[0 2]
+Epoch: [179] time: 14.1110, train_loss: -0.00011190, val_loss: -0.00012027
+[0]
+[0 1 2]
+[0 2]
+Epoch: [180] time: 14.1686, train_loss: -0.00013328, val_loss: 0.54336768
+[0]
+[0]
+[0 2]
+Epoch: [181] time: 14.2014, train_loss: -0.00014030, val_loss: -0.00014266
+[0 1 2]
+[0]
+[0 2]
+Epoch: [182] time: 14.1577, train_loss: 0.91859889, val_loss: -0.00011450
+[0]
+[0]
+[0 1 2]
+Epoch: [183] time: 14.1654, train_loss: -0.00011843, val_loss: -0.00011013
+[0]
+[0]
+[0 1 2]
+Epoch: [184] time: 14.1143, train_loss: -0.00009526, val_loss: -0.00010851
+[0]
+[0]
+[0 1 2]
+Epoch: [185] time: 14.1399, train_loss: -0.00012057, val_loss: -0.00010212
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [186] time: 14.1240, train_loss: -0.00011635, val_loss: 0.05042868
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [187] time: 14.1032, train_loss: -0.00012431, val_loss: 0.79071057
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [188] time: 14.1262, train_loss: 0.50563222, val_loss: -0.00010882
+[0 1 2]
+[0 2]
+[0 1 2]
+Epoch: [189] time: 14.1270, train_loss: 0.49680659, val_loss: 0.04249194
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [190] time: 14.1465, train_loss: -0.00011058, val_loss: 0.15695678
+[0]
+[0]
+[0 1 2]
+Epoch: [191] time: 14.1200, train_loss: -0.00012956, val_loss: -0.00015906
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [192] time: 14.1525, train_loss: 1.67404211, val_loss: 0.77153146
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [193] time: 14.1367, train_loss: 0.83085823, val_loss: 0.56276834
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [194] time: 14.1020, train_loss: 0.54282629, val_loss: -0.00011556
+[0]
+[0]
+[0 1 2]
+Epoch: [195] time: 14.1478, train_loss: -0.00012088, val_loss: -0.00011849
+[0 1 2]
+[0]
+[0 1 2]
+Epoch: [196] time: 14.1025, train_loss: 0.17541720, val_loss: -0.00012904
+[0 1 2]
+[0 1 2]
+[0 1 2]
+Epoch: [197] time: 14.1102, train_loss: 0.65484232, val_loss: 0.15186118
+[0]
+[0 1 2]
+[0 1 2]
+Epoch: [198] time: 14.1328, train_loss: -0.00011900, val_loss: 0.36933222
+[0]
+[0]
+[0 1 2]
+Epoch: [199] time: 14.1483, train_loss: -0.00013810, val_loss: -0.00013149
+]0;ec2-user@ip-172-31-40-141:~/U-Net-TensorFlow[ec2-user@ip-172-31-40-141 U-Net-TensorFlow]$ 
+]0;ec2-user@ip-172-31-40-141:~/U-Net-TensorFlow[ec2-user@ip-172-31-40-141 U-Net-TensorFlow]$ git ts[K[Kstatus
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	[31mmodified:   loss.txt[m
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	[31m__pycache__/conv_def.cpython-35.pyc[m
+	[31m__pycache__/json_io.cpython-35.pyc[m
+	[31m__pycache__/load_data.cpython-35.pyc[m
+	[31m__pycache__/model.cpython-35.pyc[m
+	[31mjson/parameter_test_2017-10-20_17:35:18.json[m
+	[31mjson/parameter_test_2017-10-20_17:40:54.json[m
+	[31mjson/parameter_test_2017-10-20_17:46:00.json[m
+	[31mjson/parameter_test_2017-10-20_17:52:45.json[m
+	[31mtrying.script[m
+
+no changes added to commit (use "git add" and/or "git commit -a")
+]0;ec2-user@ip-172-31-40-141:~/U-Net-TensorFlow[ec2-user@ip-172-31-40-141 U-Net-TensorFlow]$ git[K[K[Kexit
+exit
+
+Script done on Fri 20 Oct 2017 06:41:43 PM UTC

@@ -1,0 +1,19 @@
+{
+    "save_interval": 2000,
+    "input_size": 96,
+    "model_name": "hvsmr_test_2017-10-20_17:35:18.model",
+    "check_point_dir": ".",
+    "phase": "train",
+    "resize_coefficient": 1.0,
+    "input_channels": 1,
+    "output_channels": 3,
+    "train_data_dir": "../hvsmr/data/",
+    "batch_size": 1,
+    "learning_rate": 0.001,
+    "beta1": 0.5,
+    "epoch": 100,
+    "test_data_dir": "../hvsmr/data/",
+    "cube_overlapping_factor": 4,
+    "label_data_dir": "../hvsmr/label",
+    "output_size": 96
+}
