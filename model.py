@@ -269,11 +269,12 @@ class Unet3D(object):
                 loss_log.write(str(np.unique(train_label_batch)))
                 loss_log.write(str(np.unique(val_label_batch)))
                 loss_log.write(str(np.unique(val_prediction)))
+                loss_log.write('\n')
                 '''Dice?'''
                 # loss_log.write('%s %s\n' % (train_loss, val_loss))
 
                 loss_log.write(
-                    'Epoch: [%2d] time: %4.4f, train_loss: %.8f, val_loss: %.8f'
+                    'Epoch: [%2d] time: %4.4f, train_loss: %.8f, val_loss: %.8f \n'
                     % (epoch, time.time() - start_time, train_loss, val_loss)
                 )
 
