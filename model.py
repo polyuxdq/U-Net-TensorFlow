@@ -263,7 +263,7 @@ class Unet3D(object):
                 val_loss = self.total_loss.eval({self.input_image: val_data_batch,
                                                  self.input_ground_truth: val_label_batch})
                 val_prediction = self.sess.run(self.predicted_label,
-                                               feed_dict={self.input_image: val_label_batch})
+                                               feed_dict={self.input_image: val_data_batch})
                 # print(np.unique(train_label_batch))
                 # print(np.unique(val_prediction))
                 '''Dice?'''
