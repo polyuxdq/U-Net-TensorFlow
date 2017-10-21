@@ -241,7 +241,7 @@ class Unet3D(object):
         checkpoint_dir = os.path.join(checkpoint_dir, model_dir)
         if not os.path.exists(checkpoint_dir):
             os.makedirs(checkpoint_dir)
-        self.saver.save(self.sess, model_name, global_step=global_step)
+        self.saver.save(self.sess, os.path.join(checkpoint_dir, model_name), global_step=global_step)
         # defaults to the list of all saveable objects
 
     '''To be checked!'''
