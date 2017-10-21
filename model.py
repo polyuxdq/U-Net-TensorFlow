@@ -339,8 +339,8 @@ class Unet3D(object):
                 loss_log.write(output_format)
                 print(output_format)
                 if np.mod(epoch+1, self.save_interval) == 0:
-                    'save the check point'
-                    print('saving...')
+                    self.save_checkpoint(self.checkpoint_dir, self.model_name, global_step=epoch+1)
+                    print('Model saved with epoch %d', epoch+1)
 
 
 if __name__ == '__main__':
