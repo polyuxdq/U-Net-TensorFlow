@@ -340,7 +340,7 @@ class Unet3D(object):
                 print(output_format)
                 if np.mod(epoch+1, self.save_interval) == 0:
                     self.save_checkpoint(self.checkpoint_dir, self.model_name, global_step=epoch+1)
-                    print('Model saved with epoch %d', epoch+1)
+                    print('Model saved with epoch %d' % epoch+1)
 
 
 if __name__ == '__main__':
