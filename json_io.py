@@ -1,5 +1,7 @@
 import json
 
+''' Json for Parameter Setting and IO '''
+
 
 # convert dictionary to json
 def dict_to_json(dict_data, write_file=False, file_name=None):
@@ -34,7 +36,7 @@ def extract_json_format_from_class_init(text_in_file):
         for line in text_read:
             line = line.strip().split('\'')
             if len(line) == 3:
-                append_string = "  \"%s\": \"\",\n" % line[1]
+                append_string = "    \"%s\": \"\",\n" % line[1]
                 output_string = output_string + append_string
     output_string = output_string[:-2] + '\n}\n'
     return output_string

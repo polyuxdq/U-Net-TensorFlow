@@ -1,9 +1,10 @@
 import datetime
 import os
 import tensorflow as tf
-
-from model import Unet3D
 from json_io import *
+from model import Unet3D
+
+''' Main Function '''
 
 
 def init_parameter(name):
@@ -23,7 +24,8 @@ def init_parameter(name):
     parameter_dict['test_data_dir'] = "../hvsmr/data/"
     parameter_dict['label_data_dir'] = "../hvsmr/label"
     parameter_dict['model_name'] = "hvsmr_" + name + ".model"
-    parameter_dict['check_point_dir'] = "."
+    parameter_dict['name_with_runtime'] = name
+    parameter_dict['checkpoint_dir'] = "checkpoint/"
     parameter_dict['resize_coefficient'] = 1.0
     # from previous version
     parameter_dict['save_interval'] = 2000
@@ -43,6 +45,8 @@ def main(args):
 
     # load predefined training data
     parameter_dict = init_parameter(name)
+    if not os.path.exists('json/'):
+        os.makedirs('json/')
     parameter_json = dict_to_json(parameter_dict, write_file=True, file_name='json/parameter_' + name + '.json')
     print(parameter_json)
 

@@ -1,8 +1,13 @@
-from conv_def import *
-from load_data import *
-from glob import glob
-import numpy as np
+import os
 import time
+from conv_def import *
+from data_io import *
+from glob import glob
+from json_io import *
+from loss_def import *
+import numpy as np
+
+''' 3D U-Net Model '''
 
 
 class Unet3D(object):
@@ -26,14 +31,17 @@ class Unet3D(object):
         self.auxiliary3_weight_loss = None
         self.total_weight_loss = None
         self.total_loss = None
-
         self.trainable_variables = None
         self.log_writer = None
+        self.fine_tuning_variables = None
+        self.saver = None
+        self.saver_fine_tuning = None
 
         # predefined
         # single-gpu
         self.device = ['/gpu:0', '/gpu:0', '/cpu:0']
         self.sess = sess
+        self.parameter_dict = parameter_dict
         self.phase = parameter_dict['phase']
         self.batch_size = parameter_dict['batch_size']
         self.input_size = parameter_dict['input_size']
@@ -47,7 +55,8 @@ class Unet3D(object):
         self.test_data_dir = parameter_dict['test_data_dir']
         self.label_data_dir = parameter_dict['label_data_dir']
         self.model_name = parameter_dict['model_name']
-        self.check_point_dir = parameter_dict['check_point_dir']
+        self.name_with_runtime = parameter_dict['name_with_runtime']
+        self.checkpoint_dir = parameter_dict['checkpoint_dir']
         self.resize_coefficient = parameter_dict['resize_coefficient']
 
         # from previous version
@@ -60,7 +69,7 @@ class Unet3D(object):
     def unet_model(self, inputs):
         is_training = (self.phase == 'train')
         concat_dimension = 4  # channels_last
-        '''What does concat dimension mean'''
+
         # down-sampling path
         # device: gpu0
         with tf.device(device_name_or_function=self.device[0]):
@@ -150,42 +159,14 @@ class Unet3D(object):
                                         stride=1, use_bias=True, name='auxiliary1_prob_2x')
             auxiliary1_prob_1x = deconv3d(inputs=auxiliary1_prob_2x, output_channels=self.output_channels,
                                           name='auxiliary1_prob_1x')
+        # TODO: draw a graph
 
         # device: cpu0
         with tf.device(device_name_or_function=self.device[2]):
             softmax_prob = tf.nn.softmax(logits=predicted_prob, name='softmax_prob')
-            predicted_label = tf.argmax(input=softmax_prob, axis=4, name='argmax')
+            predicted_label = tf.argmax(input=softmax_prob, axis=4, name='predicted_label')
 
         return predicted_prob, predicted_label, auxiliary1_prob_1x, auxiliary2_prob_1x, auxiliary3_prob_1x
-
-    '''Dice Loss, depth 3, Check'''
-    @staticmethod
-    def dice_loss(prediction, ground_truth):
-        ground_truth = tf.one_hot(indices=ground_truth, depth=3)
-        dice = 0
-        for i in range(3):
-            # reduce_mean calculation
-            intersection = tf.reduce_mean(prediction[:, :, :, :, i] * ground_truth[:, :, :, :, i])
-            union_prediction = tf.reduce_sum(prediction[:, :, :, :, i] * prediction[:, :, :, :, i])
-            union_ground_truth = tf.reduce_sum(ground_truth[:, :, :, :, i] * ground_truth[:, :, :, :, i])
-            union = union_ground_truth + union_prediction
-            dice = dice + 2 * intersection / union
-        return -dice
-
-    '''SoftMax Loss, Check'''
-    @staticmethod
-    def softmax_loss(logits, labels):
-        prediction = logits
-        ground_truth = tf.one_hot(indices=labels, depth=3)
-        softmax_prediction = tf.nn.softmax(logits=prediction)
-        loss = 0
-        for i in range(3):
-            class_i_ground_truth = ground_truth[:, :, :, :, i]
-            class_i_prediction = softmax_prediction[:, :, :, :, i]
-            weight = 1 - (tf.reduce_sum(class_i_ground_truth) / tf.reduce_sum(ground_truth))
-            loss = loss - tf.reduce_mean(weight * class_i_ground_truth * tf.log(
-                tf.clip_by_value(t=class_i_prediction, clip_value_min=0.005, clip_value_max=1)))
-        return loss
 
     def build_model(self):
         # input data and labels
@@ -194,38 +175,91 @@ class Unet3D(object):
                                                  self.input_size, self.input_channels], name='input_image')
         self.input_ground_truth = tf.placeholder(dtype=tf.int32, shape=[self.batch_size, self.input_size,
                                                                         self.input_size, self.input_size],
-                                                 name='input_target')
+                                                 name='input_ground_truth')
         # probability
         self.predicted_prob, self.predicted_label, self.auxiliary1_prob_1x, \
             self.auxiliary2_prob_1x, self.auxiliary3_prob_1x = self.unet_model(self.input_image)
 
         # dice loss
-        self.main_dice_loss = self.dice_loss(self.predicted_prob, self.input_ground_truth)
-        self.auxiliary1_dice_loss = self.dice_loss(self.auxiliary1_prob_1x, self.input_ground_truth)
-        self.auxiliary2_dice_loss = self.dice_loss(self.auxiliary2_prob_1x, self.input_ground_truth)
-        self.auxiliary3_dice_loss = self.dice_loss(self.auxiliary3_prob_1x, self.input_ground_truth)
+        self.main_dice_loss = dice_loss_function(self.predicted_prob, self.input_ground_truth)
+        self.auxiliary1_dice_loss = dice_loss_function(self.auxiliary1_prob_1x, self.input_ground_truth)
+        self.auxiliary2_dice_loss = dice_loss_function(self.auxiliary2_prob_1x, self.input_ground_truth)
+        self.auxiliary3_dice_loss = dice_loss_function(self.auxiliary3_prob_1x, self.input_ground_truth)
         self.total_dice_loss = \
             self.main_dice_loss + \
             self.auxiliary1_dice_loss * 0.8 + \
             self.auxiliary2_dice_loss * 0.4 + \
             self.auxiliary3_dice_loss * 0.2
         # class-weighted cross-entropy loss
-        self.main_weight_loss = self.softmax_loss(self.predicted_prob, self.input_ground_truth)
-        self.auxiliary1_weight_loss = self.softmax_loss(self.auxiliary1_prob_1x, self.input_ground_truth)
-        self.auxiliary2_weight_loss = self.softmax_loss(self.auxiliary2_prob_1x, self.input_ground_truth)
-        self.auxiliary3_weight_loss = self.softmax_loss(self.auxiliary3_prob_1x, self.input_ground_truth)
+        self.main_weight_loss = softmax_loss_function(self.predicted_prob, self.input_ground_truth)
+        self.auxiliary1_weight_loss = softmax_loss_function(self.auxiliary1_prob_1x, self.input_ground_truth)
+        self.auxiliary2_weight_loss = softmax_loss_function(self.auxiliary2_prob_1x, self.input_ground_truth)
+        self.auxiliary3_weight_loss = softmax_loss_function(self.auxiliary3_prob_1x, self.input_ground_truth)
         self.total_weight_loss = \
             self.main_weight_loss +\
             self.auxiliary1_weight_loss * 0.9 + \
             self.auxiliary2_weight_loss * 0.6 + \
             self.auxiliary3_weight_loss * 0.3
 
+        # TODO: adjust the weights
         self.total_loss = self.total_dice_loss * 100.0 + self.total_weight_loss
 
         # trainable variables
         self.trainable_variables = tf.trainable_variables()
 
-        '''No Save Module'''
+        # TODO: how to extract layers for fine-tuning? why?
+        '''How to list all of them'''
+        fine_tuning_layer = [
+                'encoder1_1/encoder1_1_conv/kernel:0',
+                'encoder1_2/encoder1_2_conv/kernel:0',
+                'encoder2_1/encoder2_1_conv/kernel:0',
+                'encoder2_2/encoder2_2_conv/kernel:0',
+                'encoder3_1/encoder3_1_conv/kernel:0',
+                'encoder3_2/encoder3_2_conv/kernel:0',
+                'encoder4_1/encoder4_1_conv/kernel:0',
+                'encoder4_2/encoder4_2_conv/kernel:0',
+        ]
+
+        # TODO: what does this part mean
+        self.fine_tuning_variables = []
+        for variable in self.trainable_variables:
+            # print('\'%s\',' % variable.name)
+            for index, kernel_name in enumerate(fine_tuning_layer):
+                if kernel_name in variable.name:
+                    self.fine_tuning_variables.append(variable)
+                    break  # not necessary to continue
+
+        self.saver = tf.train.Saver()
+        self.saver_fine_tuning = tf.train.Saver(self.fine_tuning_variables)
+        # The Saver class adds ops to save and restore variables to and from checkpoints.
+        # It also provides convenience methods to run these ops.
+        print('Model built successfully.')
+
+    def save_checkpoint(self, checkpoint_dir, model_name, global_step):
+        model_dir = '%s_%s' % (self.batch_size, self.output_size)
+        '''Why?'''
+        checkpoint_dir = os.path.join(checkpoint_dir, model_dir)
+        if not os.path.exists(checkpoint_dir):
+            os.makedirs(checkpoint_dir)
+        self.saver.save(self.sess, model_name, global_step=global_step)
+        # defaults to the list of all saveable objects
+
+    '''To be checked!'''
+
+    def load_checkpoint(self, checkpoint_dir):
+        model_dir = '%s_%s' % (self.batch_size, self.output_size)
+        checkpoint_dir = os.path.join(checkpoint_dir, model_dir)
+
+        checkpoint_state = tf.train.get_checkpoint_state(checkpoint_dir)
+        # A CheckpointState if the state was available, None otherwise.
+        if checkpoint_state and checkpoint_state.model_checkpoint_path:
+            checkpoint_name = os.path.basename(checkpoint_state.model_checkpoint_path)
+            self.saver.restore(self.sess, os.path.join(checkpoint_dir, checkpoint_name))
+            return True
+        else:
+            return False
+
+    '''A function for fine-tuning'''
 
     def train(self):
         optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate, beta1=self.beta1).minimize(
@@ -236,16 +270,26 @@ class Unet3D(object):
         variables_initialization = tf.global_variables_initializer()
         self.sess.run(variables_initialization)
 
+        # TODO: load pre-trained model
+        # TODO: load checkpoint
+
         # save log
-        self.log_writer = tf.summary.FileWriter(logdir='../logs/', graph=self.sess.graph)
+        if not os.path.exists('logs/'):
+            os.makedirs('logs/')
+        self.log_writer = tf.summary.FileWriter(logdir='logs/', graph=self.sess.graph)
 
         # load all volume files
         image_list = glob(pathname='{}/*.nii.gz'.format(self.train_data_dir))
         label_list = glob(pathname='{}/*.nii.gz'.format(self.label_data_dir))
         image_data_list, label_data_list = load_image_and_label(image_list, label_list, self.resize_coefficient)
+        print('Data loaded successfully.')
 
+        if not os.path.exists('loss/'):
+            os.makedirs('loss/')
         line_buffer = 1
-        with open(file='loss.txt', mode='w', buffering=line_buffer) as loss_log:
+        with open(file='loss/loss_'+self.name_with_runtime+'.txt', mode='w', buffering=line_buffer) as loss_log:
+            loss_log.write(dict_to_json(self.parameter_dict))
+
             for epoch in np.arange(self.epoch):
                 start_time = time.time()
 
@@ -254,34 +298,48 @@ class Unet3D(object):
                     image_data_list, label_data_list, self.input_size, self.batch_size)
                 val_data_batch, val_label_batch = get_image_and_label_batch(
                     image_data_list, label_data_list, self.input_size, self.batch_size)
+                '''The same data at this stage'''
 
                 # update network
-                _, train_loss = self.sess.run(
-                    [optimizer, self.total_loss],
+                _, train_loss, dice_loss, weight_loss= self.sess.run(
+                    [optimizer, self.total_loss, self.total_dice_loss, self.total_weight_loss],
                     feed_dict={self.input_image: train_data_batch,
                                self.input_ground_truth: train_label_batch})
                 '''Summary'''
+                # may not run each time
                 val_loss = self.total_loss.eval({self.input_image: val_data_batch,
                                                  self.input_ground_truth: val_label_batch})
                 val_prediction = self.sess.run(self.predicted_label,
                                                feed_dict={self.input_image: val_data_batch})
 
+                loss_log.write('[label] ')
                 loss_log.write(str(np.unique(train_label_batch)))
                 loss_log.write(str(np.unique(val_label_batch)))
                 loss_log.write(str(np.unique(val_prediction)))
                 loss_log.write('\n')
-                '''Dice?'''
+
+                # Dice
+                dice = []
+                for i in range(len(self.output_channels)):
+                    intersection = np.sum(
+                        ((val_label_batch[:, :, :, :] == i) * 1) * ((val_prediction[:, :, :, :] == i) * 1)
+                    )
+                    union = np.sum(
+                        ((val_label_batch[:, :, :, :] == i) * 1) + ((val_prediction[:, :, :, :] == i) * 1)
+                    ) + 1e-5
+                    '''Why not necessary to square'''
+                    dice.append(2.0 * intersection / union)
+                loss_log.write('[Dice] %s' % dice)
+
                 # loss_log.write('%s %s\n' % (train_loss, val_loss))
-
-                loss_log.write(
-                    'Epoch: [%2d] time: %4.4f, train_loss: %.8f, val_loss: %.8f \n'
-                    % (epoch, time.time() - start_time, train_loss, val_loss)
-                )
-
-                print(
-                    'Epoch: [%2d] time: %4.4f, train_loss: %.8f, val_loss: %.8f'
-                    % (epoch, time.time() - start_time, train_loss, val_loss)
-                )
+                output_format = '[Loss] Epoch: %d, time: %4.4f, train_loss: %.8f, val_loss: %.8f,' \
+                                'dice_loss: %.8f, weight_loss: %.8f \n'\
+                                % (epoch, time.time() - start_time, train_loss, val_loss, dice_loss, weight_loss)
+                loss_log.write(output_format)
+                print(output_format)
+                if np.mod(epoch+1, self.save_interval) == 0:
+                    'save the check point'
+                    print('saving...')
 
 
 if __name__ == '__main__':

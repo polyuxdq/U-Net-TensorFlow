@@ -5,6 +5,7 @@
       <w>logits</w>
       <w>partitioner</w>
       <w>regularizer</w>
+      <w>saveable</w>
       <w>skimage</w>
       <w>softmax</w>
     </words>

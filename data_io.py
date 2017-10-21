@@ -1,10 +1,11 @@
 import copy
-import numpy as np
 import nibabel as nib
+import numpy as np
 from skimage.transform import resize
 
+''' Data loading and IO '''
 
-'''Code To Be Checked!'''
+''' Code To Be Checked! '''
 
 
 # load all data into memory
@@ -42,7 +43,7 @@ def load_image_and_label(image_filelist, label_filelist, resize_coefficient):
 
 # generate batch
 def get_image_and_label_batch(image_data_list, label_data_list, input_size, batch_size,
-                               channel=1, flip_flag=False, rotation_flag=False):
+                              channel=1, flip_flag=False, rotation_flag=False):
     image_batch = np.zeros([batch_size, input_size, input_size, input_size, channel]).astype('float32')
     label_batch = np.zeros([batch_size, input_size, input_size, input_size]).astype('int32')
 
@@ -67,7 +68,7 @@ def get_image_and_label_batch(image_data_list, label_data_list, input_size, batc
         crop_position = np.array([depth_random[0], height_random[0], width_random[0]])
         image_temp = copy.deepcopy(
             random_image[
-                crop_position[0]:crop_position[0]+input_size,
+                crop_position[0]:crop_position[0] + input_size,
                 crop_position[1]:crop_position[1] + input_size,
                 crop_position[2]:crop_position[2] + input_size
             ]
@@ -79,14 +80,17 @@ def get_image_and_label_batch(image_data_list, label_data_list, input_size, batc
                 crop_position[2]:crop_position[2] + input_size
             ]
         )
+
         '''Necessary? Zero problem may happen'''
         # normalization
+        # TODO: check this property
         image_temp = image_temp / 255.0
         mean_temp = np.mean(image_temp)
         deviation_temp = np.std(image_temp)
         image_normalization = (image_temp - mean_temp) / (deviation_temp + 1e-5)
 
         # data augmentation with rotation
+        # TODO: data augmentation
         if rotation_flag and np.random.random() > 0.65:
             print('Rotation batch...')
             '''Further improvement on rotation'''
@@ -116,3 +120,4 @@ if __name__ == '__main__':
         print(image_batch)
         print('label')
         print(label_batch)
+    # TODO: visualization

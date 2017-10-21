@@ -33,7 +33,8 @@ def conv3d(inputs, output_channels, kernel_size, stride, padding='same', use_bia
 def conv_bn_relu(inputs, output_channels, kernel_size, stride, is_training, name,
                  padding='same', use_bias=False):
     with tf.variable_scope(name_or_scope=name):
-        conv = conv3d(inputs, output_channels, kernel_size, stride, padding=padding, use_bias=use_bias, name='conv')
+        conv = conv3d(inputs, output_channels, kernel_size, stride, padding=padding,
+                      use_bias=use_bias, name=name+'_conv')
         '''device control?'''
         bn = tf.contrib.layers.batch_norm(
             inputs=conv,                # tensor, first dimension of batch_size
@@ -104,24 +105,27 @@ def deconv3d(inputs, output_channels, name='deconv'):
 # 3D Deconvolution, Batch normalization, ReLU unit
 def deconv_bn_relu(inputs, output_channels, is_training, name):
     with tf.variable_scope(name):
-        deconv = deconv3d(inputs=inputs, output_channels=output_channels, name="deconv")
+        deconv = deconv3d(inputs=inputs, output_channels=output_channels, name=name+'_deconv')
         '''device control?'''
         bn = tf.contrib.layers.batch_norm(inputs=deconv, decay=0.9, scale=True, epsilon=1e-5,
                                           updates_collections=None, is_training=is_training,
-                                          scope='batch_norm')
-        relu = tf.nn.relu(features=bn, name='relu')
+                                          scope=name+'_batch_norm')
+        relu = tf.nn.relu(features=bn, name=name+'_relu')
     return relu
+
+
+'''May be used in future'''
 
 
 # 3 Units of conv_bn_relu with combined output, why?
 def conv_bn_relu_x3(inputs, output_channels, kernel_size, stride, is_training, name,
                     padding='same', use_bias=False):
     with tf.variable_scope(name):
-        z = conv_bn_relu(inputs, output_channels, kernel_size, stride, is_training, name='dense1',
+        z = conv_bn_relu(inputs, output_channels, kernel_size, stride, is_training, name=name+'_dense1',
                          padding=padding, use_bias=use_bias)
-        z_out = conv_bn_relu(z, output_channels, kernel_size, stride, is_training, name='dense2',
+        z_out = conv_bn_relu(z, output_channels, kernel_size, stride, is_training, name=name+'_dense2',
                              padding=padding, use_bias=use_bias)
-        z_out = conv_bn_relu(z_out, output_channels, kernel_size, stride, is_training, name='dense3',
+        z_out = conv_bn_relu(z_out, output_channels, kernel_size, stride, is_training, name=name+'_dense3',
                              padding=padding, use_bias=use_bias)
     return z+z_out
     # input -> z -> z_out -> z_out + z
