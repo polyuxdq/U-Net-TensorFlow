@@ -29,7 +29,7 @@ def init_parameter(name):
     parameter_dict['checkpoint_dir'] = "checkpoint/"
     parameter_dict['resize_coefficient'] = 1.0
     # from previous version
-    parameter_dict['save_interval'] = 2500
+    parameter_dict['save_interval'] = 100
     parameter_dict['cube_overlapping_factor'] = 4
 
     return parameter_dict

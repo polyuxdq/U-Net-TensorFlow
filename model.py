@@ -39,7 +39,7 @@ class Unet3D(object):
 
         # predefined
         # single-gpu
-        self.device = ['/gpu:0', '/gpu:0', '/cpu:0']
+        self.device = ['/gpu:0', '/gpu:1', '/cpu:0']
         self.sess = sess
         self.parameter_dict = parameter_dict
         self.phase = parameter_dict['phase']
