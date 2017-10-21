@@ -202,7 +202,7 @@ class Unet3D(object):
             self.auxiliary3_weight_loss * 0.3
 
         # TODO: adjust the weights
-        self.total_loss = self.total_dice_loss * 100.0 + self.total_weight_loss
+        self.total_loss = self.total_dice_loss * 1e5 + self.total_weight_loss
 
         # trainable variables
         self.trainable_variables = tf.trainable_variables()
@@ -329,12 +329,13 @@ class Unet3D(object):
                     ) + 1e-5
                     '''Why not necessary to square'''
                     dice.append(2.0 * intersection / union)
-                loss_log.write('[Dice] %s' % dice)
+                loss_log.write('[Dice] %s \n' % dice)
 
                 # loss_log.write('%s %s\n' % (train_loss, val_loss))
-                output_format = '[Loss] Epoch: %d, time: %4.4f, train_loss: %.8f, val_loss: %.8f,' \
-                                'dice_loss: %.8f, weight_loss: %.8f \n'\
-                                % (epoch, time.time() - start_time, train_loss, val_loss, dice_loss, weight_loss)
+                output_format = '[Epoch] %d, time: %4.4f, train_loss: %.8f, val_loss: %.8f \n' \
+                                '[Loss] dice_loss: %.8f, weight_loss: %.8f \n'\
+                                % (epoch, time.time() - start_time, train_loss, val_loss,
+                                   dice_loss * 1e5, weight_loss)
                 loss_log.write(output_format)
                 print(output_format)
                 if np.mod(epoch+1, self.save_interval) == 0:
