@@ -320,7 +320,7 @@ class Unet3D(object):
 
                 # Dice
                 dice = []
-                for i in range(len(self.output_channels)):
+                for i in range(self.output_channels):
                     intersection = np.sum(
                         ((val_label_batch[:, :, :, :] == i) * 1) * ((val_prediction[:, :, :, :] == i) * 1)
                     )
