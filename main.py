@@ -1,3 +1,4 @@
+import argparse
 import datetime
 import os
 import tensorflow as tf
@@ -34,9 +35,18 @@ def init_parameter(name):
     return parameter_dict
 
 
-def main(args):
+# What is the input parameter
+def main(_):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-g', '--gpu', help="cuda visible devices")
+    args = parser.parse_args()
+    if args.gpu:
+        gpu = args.gpu
+    else:
+        gpu = '0,1'
+
     # set cuda visible device
-    os.environ["CUDA_VISIBLE_DEVICES"] = '0,1'
+    os.environ["CUDA_VISIBLE_DEVICES"] = gpu
 
     # name the model
     name = 'test'
