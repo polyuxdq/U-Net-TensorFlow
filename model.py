@@ -13,6 +13,8 @@ import numpy as np
 class Unet3D(object):
     def __init__(self, sess, parameter_dict):
         # member variables
+        self.loss_coefficient = 1e4
+        
         self.input_image = None
         self.input_ground_truth = None
         self.predicted_prob = None
@@ -202,7 +204,7 @@ class Unet3D(object):
             self.auxiliary3_weight_loss * 0.3
 
         # TODO: adjust the weights
-        self.total_loss = self.total_dice_loss * 1e5 + self.total_weight_loss
+        self.total_loss = self.total_dice_loss * self.loss_coefficient + self.total_weight_loss
 
         # trainable variables
         self.trainable_variables = tf.trainable_variables()
@@ -336,7 +338,7 @@ class Unet3D(object):
                 output_format = '[Epoch] %d, time: %4.4f, train_loss: %.8f, val_loss: %.8f \n' \
                                 '[Loss] dice_loss: %.8f, weight_loss: %.8f \n\n'\
                                 % (epoch, time.time() - start_time, train_loss, val_loss,
-                                   dice_loss * 1e5, weight_loss)
+                                   dice_loss * self.loss_coefficient, weight_loss)
                 loss_log.write(output_format)
                 print(output_format, end='')
                 if np.mod(epoch+1, self.save_interval) == 0:
