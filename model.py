@@ -289,6 +289,7 @@ class Unet3D(object):
         line_buffer = 1
         with open(file='loss/loss_'+self.name_with_runtime+'.txt', mode='w', buffering=line_buffer) as loss_log:
             loss_log.write(dict_to_json(self.parameter_dict))
+            loss_log.write('\n')
 
             for epoch in np.arange(self.epoch):
                 start_time = time.time()
