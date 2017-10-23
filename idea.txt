@@ -1,0 +1,17 @@
+# train mode
+probability sampling: which part are more important for the training
+all sampling: go through all the samples
+(may combine two together)
+
+# One problem: center always be more frequent because of the size -> draw the 3D graphs of data
+
+# test mode
+meaningless to test each epoch, waste of time
+
+# dice coefficient
+
+# gpu acceleration
+batch size of 2, parallel computing
+read paper! do not think by self
+
+more idea with code reading
