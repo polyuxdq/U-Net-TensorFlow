@@ -7,6 +7,8 @@ all sampling: go through all the samples
 
 # test mode
 meaningless to test each epoch, waste of time
+a new test function!!!
+TODO
 
 # dice coefficient
 
