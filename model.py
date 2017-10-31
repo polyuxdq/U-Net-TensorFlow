@@ -294,6 +294,7 @@ class Unet3D(object):
             os.makedirs('loss/')
         line_buffer = 1
         with open(file='loss/loss_'+self.name_with_runtime+'.txt', mode='w', buffering=line_buffer) as loss_log:
+            loss_log.write('[Train Mode]\n')
             loss_log.write(dict_to_json(self.parameter_dict))
             loss_log.write('\n')
 
@@ -361,7 +362,12 @@ class Unet3D(object):
             print(" [*] Load Success")
         else:
             print(" [!] Load Failed")
-            # exit(1)
+            exit(1)  # exit with load error
+
+        # save log
+        if not os.path.exists('logs/'):
+            os.makedirs('logs/')
+        self.log_writer = tf.summary.FileWriter(logdir='logs/', graph=self.sess.graph)
 
         # load all volume files
         image_list = glob(pathname='{}/*.nii.gz'.format(self.train_data_dir))
@@ -377,29 +383,64 @@ class Unet3D(object):
             test_log.write(dict_to_json(self.parameter_dict))
             test_log.write('\n')
 
-            '''Start the full test: CPU?'''
-            for ith in range(len(image_list)):
+            for ith_sample in range(len(image_list)):
                 start_time = time.time()
 
-                # TODO: Get Batch One
-                test_data_batch, test_label_batch = image_data_list[ith], label_data_list[ith]
+                ith_depth, ith_height, ith_width = image_data_list[ith_sample]
+                '''Math Calculation'''
+                prediction_full_batch = np.zeros([1, ith_depth, ith_height, ith_width, self.batch_size])
+                voted_prediction_label = np.zeros([1, ith_depth, ith_height, ith_width])
 
-                # update network
-                test_loss, dice_loss, weight_loss = self.sess.run(
-                    [self.total_loss, self.total_dice_loss, self.total_weight_loss],
-                    feed_dict={self.input_image: test_data_batch,
-                               self.input_ground_truth: test_label_batch})
-                '''Summary'''
-                # may not run each time
-                test_prediction = self.sess.run(self.predicted_label,
-                                                feed_dict={self.input_image: test_data_batch})
+                '''
+                for i, j, k, loop?
+                load batch each
+                
+                updae network
+                
+                get the label, loss still OK
+                
+                calculate the dice -> and other standard
+                '''
 
-                test_log.write('[label] ')
-                test_log.write(str(np.unique(test_data_batch)))
-                test_log.write(str(np.unique(test_label_batch)))
-                test_log.write(str(np.unique(test_prediction)))
-                test_log.write('\n')
+                for d in range(ith_depth):
+                    for h in range(ith_height):
+                        for w in range(ith_width):
+                            souce_data, souce_label = image_data_list[ith_sample], label_data_list[ith_sample]
+                            test_data_batch = np.zeros([self.batch_size, self.input_size,
+                                                        self.input_size, self.input_size, 1]).astype('float32')
+                            test_label_batch = np.zeros([self.batch_size, self.input_size,
+                                                         self.input_size, self.input_size]).astype('int32')
 
+                            # update network
+                            test_prediction = self.sess.run(self.predicted_label,
+                                                            feed_dict={self.input_image: test_data_batch})
+
+                            test_loss, dice_loss, weight_loss = self.sess.run(
+                                [self.total_loss, self.total_dice_loss, self.total_weight_loss],
+                                feed_dict={self.input_image: test_data_batch,
+                                           self.input_ground_truth: test_label_batch})
+
+                            '''Update record of prediction_full_batch'''
+                            '''Extract information of loss'''
+                            # Necessary to print info during test??
+
+                            test_log.write('[label] ')
+                            test_log.write(str(np.unique(test_data_batch)))
+                            test_log.write(str(np.unique(test_label_batch)))
+                            test_log.write(str(np.unique(test_prediction)))
+                            test_log.write('\n')
+
+                            # loss_log.write('%s %s\n' % (train_loss, val_loss))
+                            output_format = '[Epoch] %d, time: %4.4f, test_loss: %.8f \n' \
+                                            '[Loss] dice_loss: %.8f, weight_loss: %.8f \n\n' \
+                                            % (ith_sample, time.time() - start_time, test_loss,
+                                               dice_loss * self.loss_coefficient, weight_loss)
+                            test_log.write(output_format)
+                            print(output_format, end='')
+
+                '''vote the information'''
+
+                '''Revize the name of dice calculation'''
                 # Dice
                 dice = []
                 for i in range(self.output_channels):
@@ -409,17 +450,9 @@ class Unet3D(object):
                     union = np.sum(
                         ((test_label_batch[:, :, :, :] == i) * 1) + ((test_prediction[:, :, :, :] == i) * 1)
                     ) + 1e-5
-                    '''Why not necessary to square'''
+                    '''Why not necessary to square -> Check paper'''
                     dice.append(2.0 * intersection / union)
                 test_log.write('[Dice] %s \n' % dice)
-
-                # loss_log.write('%s %s\n' % (train_loss, val_loss))
-                output_format = '[Epoch] %d, time: %4.4f, test_loss: %.8f \n' \
-                                '[Loss] dice_loss: %.8f, weight_loss: %.8f \n\n'\
-                                % (ith, time.time() - start_time, test_loss,
-                                   dice_loss * self.loss_coefficient, weight_loss)
-                test_log.write(output_format)
-                print(output_format, end='')
 
 
 if __name__ == '__main__':
