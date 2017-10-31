@@ -41,7 +41,11 @@ class Unet3D(object):
 
         # predefined
         # single-gpu
-        self.device = ['/gpu:0', '/gpu:1', '/cpu:0']
+        self.gpu_number = len(parameter_dict['gpu'].split(','))
+        if self.gpu_number > 1:
+            self.device = ['/gpu:0', '/gpu:1', '/cpu:0']
+        else:
+            self.device = ['/gpu:0', '/gpu:0', '/cpu:0']
         self.sess = sess
         self.parameter_dict = parameter_dict
         self.phase = parameter_dict['phase']
@@ -304,7 +308,7 @@ class Unet3D(object):
                 '''The same data at this stage'''
 
                 # update network
-                _, train_loss, dice_loss, weight_loss= self.sess.run(
+                _, train_loss, dice_loss, weight_loss = self.sess.run(
                     [optimizer, self.total_loss, self.total_dice_loss, self.total_weight_loss],
                     feed_dict={self.input_image: train_data_batch,
                                self.input_ground_truth: train_label_batch})
@@ -344,6 +348,78 @@ class Unet3D(object):
                 if np.mod(epoch+1, self.save_interval) == 0:
                     self.save_checkpoint(self.checkpoint_dir, self.model_name, global_step=epoch+1)
                     print('Model saved with epoch %d' % (epoch+1))
+
+    '''Not Yet Finished'''
+    def test(self):
+        # initialization
+        variables_initialization = tf.global_variables_initializer()
+        self.sess.run(variables_initialization)
+
+        # TODO: load pre-trained model
+        # TODO: load checkpoint
+        if self.load_checkpoint(self.checkpoint_dir):
+            print(" [*] Load Success")
+        else:
+            print(" [!] Load Failed")
+            # exit(1)
+
+        # load all volume files
+        image_list = glob(pathname='{}/*.nii.gz'.format(self.train_data_dir))
+        label_list = glob(pathname='{}/*.nii.gz'.format(self.label_data_dir))
+        image_data_list, label_data_list = load_image_and_label(image_list, label_list, self.resize_coefficient)
+        print('Data loaded successfully.')
+
+        if not os.path.exists('test/'):
+            os.makedirs('test/')
+        line_buffer = 1
+        with open(file='test/test_'+self.name_with_runtime+'.txt', mode='w', buffering=line_buffer) as test_log:
+            test_log.write('[Test Mode]\n')
+            test_log.write(dict_to_json(self.parameter_dict))
+            test_log.write('\n')
+
+            '''Start the full test: CPU?'''
+            for ith in range(len(image_list)):
+                start_time = time.time()
+
+                # TODO: Get Batch One
+                test_data_batch, test_label_batch = image_data_list[ith], label_data_list[ith]
+
+                # update network
+                test_loss, dice_loss, weight_loss = self.sess.run(
+                    [self.total_loss, self.total_dice_loss, self.total_weight_loss],
+                    feed_dict={self.input_image: test_data_batch,
+                               self.input_ground_truth: test_label_batch})
+                '''Summary'''
+                # may not run each time
+                test_prediction = self.sess.run(self.predicted_label,
+                                                feed_dict={self.input_image: test_data_batch})
+
+                test_log.write('[label] ')
+                test_log.write(str(np.unique(test_data_batch)))
+                test_log.write(str(np.unique(test_label_batch)))
+                test_log.write(str(np.unique(test_prediction)))
+                test_log.write('\n')
+
+                # Dice
+                dice = []
+                for i in range(self.output_channels):
+                    intersection = np.sum(
+                        ((test_label_batch[:, :, :, :] == i) * 1) * ((test_prediction[:, :, :, :] == i) * 1)
+                    )
+                    union = np.sum(
+                        ((test_label_batch[:, :, :, :] == i) * 1) + ((test_prediction[:, :, :, :] == i) * 1)
+                    ) + 1e-5
+                    '''Why not necessary to square'''
+                    dice.append(2.0 * intersection / union)
+                test_log.write('[Dice] %s \n' % dice)
+
+                # loss_log.write('%s %s\n' % (train_loss, val_loss))
+                output_format = '[Epoch] %d, time: %4.4f, test_loss: %.8f \n' \
+                                '[Loss] dice_loss: %.8f, weight_loss: %.8f \n\n'\
+                                % (ith, time.time() - start_time, test_loss,
+                                   dice_loss * self.loss_coefficient, weight_loss)
+                test_log.write(output_format)
+                print(output_format, end='')
 
 
 if __name__ == '__main__':

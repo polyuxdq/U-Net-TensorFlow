@@ -105,19 +105,24 @@ def get_image_and_label_batch(image_data_list, label_data_list, input_size, batc
 if __name__ == '__main__':
     # Not heavy load of main memory
     from glob import glob
-    image_list = glob(pathname='{}/*.nii.gz'.format('/Users/dqxu/PycharmProjects/Master-PyTorch/data/data'))
-    label_list = glob(pathname='{}/*.nii.gz'.format('/Users/dqxu/PycharmProjects/Master-PyTorch/data/label'))
+    image_list = glob(pathname='{}/*.nii.gz'.format('../hvsmr/data'))
+    label_list = glob(pathname='{}/*.nii.gz'.format('../hvsmr/label'))
     print(image_list)
     print(label_list)
     # load test
     image_data_list, label_data_list = load_image_and_label(image_list, label_list, 1)
     print('images loaded...')
+
+    # print shape
+    for i in range(len(image_data_list)):
+        print(image_data_list[i].shape)
+
     # Testing batch
     for i in range(1):
         image_batch, label_batch = get_image_and_label_batch(image_data_list, label_data_list, input_size=96,
                                                              batch_size=1, channel=1)
         print('data')
-        print(image_batch)
+        print(image_batch.shape)
         print('label')
-        print(label_batch)
+        print(label_batch.shape)
     # TODO: visualization

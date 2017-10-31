@@ -31,6 +31,7 @@ def init_parameter(name):
     # from previous version
     parameter_dict['save_interval'] = 2000
     parameter_dict['cube_overlapping_factor'] = 4
+    parameter_dict['gpu'] = '0,1'
 
     return parameter_dict
 
@@ -39,6 +40,7 @@ def init_parameter(name):
 def main(_):
     parser = argparse.ArgumentParser()
     parser.add_argument('-g', '--gpu', help="cuda visible devices")
+    parser.add_argument('-t', '--test', action='store_true')
     args = parser.parse_args()
     if args.gpu:
         gpu = args.gpu
@@ -55,6 +57,10 @@ def main(_):
 
     # load predefined training data
     parameter_dict = init_parameter(name)
+    if args.gpu:
+        parameter_dict['gpu'] = args.gpu
+    if args.test:
+        parameter_dict['phase'] = 'test'
     if not os.path.exists('json/'):
         os.makedirs('json/')
     parameter_json = dict_to_json(parameter_dict, write_file=True, file_name='json/parameter_' + name + '.json')
@@ -66,7 +72,11 @@ def main(_):
     with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options, allow_soft_placement=True)) as sess:
         model = Unet3D(sess=sess, parameter_dict=parameter_dict)
         if parameter_dict['phase'] == 'train':
+            print('Training Phase...')
             model.train()
+        if parameter_dict['phase'] == 'test':
+            print('Testing Phase...')
+            model.test()
 
 
 if __name__ == '__main__':
