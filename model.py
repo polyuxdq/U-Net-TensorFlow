@@ -395,7 +395,7 @@ class Unet3D(object):
                 for i, j, k, loop?
                 load batch each
                 
-                updae network
+                update network
                 
                 get the label, loss still OK
                 
